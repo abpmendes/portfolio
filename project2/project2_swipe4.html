@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparação de Imagens com Swipe</title>
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            user-select: none; /* Evita seleção de texto/imagens */
+        }
+
+        .img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .img img {
+            display: block;
+            width: 100%;
+            height: auto; /* Ajusta a imagem para manter a proporção */
+        }
+
+        .img-after {
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            clip: rect(0, 50%, 100%, 0);
+        }
+
+        .slider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 5px; /* Aumenta a largura da barra */
+            background-color: #fff;
+            z-index: 3;
+            cursor: ew-resize;
+            border: 2px solid #000; /* Adiciona borda à barra */
+            border-radius: 5px; /* Bordas arredondadas */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider:before {
+            content: "⟷"; /* Ícone de arrastar */
+            font-size: 18px; /* Tamanho do ícone */
+            color: #000; /* Cor do ícone */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="imageCompare">
+        <div class="img img-before">
+            <img src="ClassificadasIniciais_1108.jpg" alt="Imagem Antes" id="imgBefore">
+        </div>
+        <div class="img img-after" id="imgAfterContainer">
+            <img src="Classificadas_Final_1108.jpg" alt="Imagem Depois" id="imgAfter">
+        </div>
+        <div class="slider" id="slider"></div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const imgAfterContainer = document.getElementById('imgAfterContainer');
+        const imgAfter = document.getElementById('imgAfter');
+        const container = document.getElementById('imageCompare');
+        const imgBefore = document.getElementById('imgBefore');
+
+        let isDragging = false;
+
+        // Ajustar a altura do contêiner com base na altura da imagem
+        imgBefore.onload = imgAfter.onload = function() {
+            container.style.height = imgBefore.clientHeight + 'px';
+        }
+
+        slider.addEventListener('mousedown', () => {
+            isDragging = true;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                moveSlider(e);
+            }
+        });
+
+        container.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            moveSlider(e.touches[0]);
+        });
+
+        container.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                moveSlider(e.touches[0]);
+            }
+        });
+
+        function moveSlider(e) {
+            const rect = container.getBoundingClientRect();
+            let xPos = e.clientX - rect.left;
+            if (xPos < 0) xPos = 0;
+            if (xPos > rect.width) xPos = rect.width;
+            slider.style.left = xPos + 'px';
+            imgAfterContainer.style.clip = `rect(0, ${xPos}px, ${rect.height}px, 0)`;
+        }
+    </script>
+</body>
+</html>

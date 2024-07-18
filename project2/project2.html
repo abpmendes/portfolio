@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Remote Sensing Analysis - Project 2</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+    <style>
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            margin-bottom: 5px; /* Adicionar espaço entre seções */
+        }
+
+        .section-content .text {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 20px;
+        }
+
+        .section-content .image-compare {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            text-align: center; /* Centralizar o conteúdo */
+        }
+
+        .image-compare iframe {
+            width: 400px;
+            height: 400px;
+            border: none;
+        }
+
+        .image-compare .legend {
+            font-size: 12px; /* Tamanho menor */
+            font-style: italic; /* Itálico */
+            color: #666;
+            margin-top: 5px; /* Margem pequena acima da legenda */
+            line-height: 1.2; /* Ajuste do espaçamento entre linhas */
+        }
+        .table-content {
+            font-size: 13px; /* Ajuste do tamanho da fonte */
+        }
+        .fraction {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .fraction .numerator {
+            display: block;
+            text-align: center;
+        }
+
+        .fraction .denominator {
+            display: block;
+            text-align: center;
+            border-top: 1px solid #000;
+        }
+
+        p, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        ol, ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        @media (max-width: 800px) {
+            .section-content {
+                flex-direction: column;
+            }
+
+            .section-content .text, .section-content .image-compare {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 10px; /* Espaçamento entre as seções em telas menores */
+            }
+        }
+    </style>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper" class="fade-in">
+
+    <!-- Header -->
+    <header id="header">
+        <a href="../index.html" class="logo">Beatriz Mendes</a>
+    </header>
+
+    <!-- Nav -->
+    <nav id="nav">
+        <ul class="links">
+            <li><a href="../index.html">Portfolio</a></li>
+            <li><a href="../aboutme.html">About Me</a></li>
+        </ul>
+        <ul class="icons">
+            <li><a href="beatrizmendes.github.io" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+            <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+        </ul>
+    </nav>
+
+    <!-- Main -->
+    <div id="main" class="container">
+        <div class="main-content">
+            <!-- Summary -->
+            <section class="summary">
+                <header class="major">
+                    <h2>Detection of Oil Spills by Remote Sensing: MV Wakashio</h2>
+                </header>
+                <p>This project employed Sentinel-1 SAR and Sentinel-2 optical satellite imagery to detect and monitor an oil spill in Mahébourg, Mauritius, in August 2020. Utilizing ArcGIS Pro, the methodology involved:</p>
+
+                <ol>
+                    <li>
+                        <br><h3>1. Image Collection:</h3>
+                        <p>Acquired pre- and post-incident images from the <a href="https://scihub.copernicus.eu/">Copernicus Open Access Hub</a>. Images included multiple dates to capture the initial phase and peak intensity of the spill.</p>
+                    </li>
+                    <li class="section-content">
+                        <div class="text">
+                            <br><h3>2. Exploratory Analysis:</h3>
+                            <p>Conducted an exploratory analysis to understand image characteristics and detect patterns. Identified key features and anomalies in the images that could indicate the presence of oil.</p>
+                            <br><h3>3. Pre-processing:</h3>
+                            <p>Performed geometric corrections to align images accurately. Applied radiometric corrections to normalize sensor response and improve image clarity. Clipped the images to focus on the study area, reducing processing time.</p>
+                        </div>
+                        <div class="image-compare">
+                            <div class="legend">Before (left) and after (right) pre-processing of the image from 08/10/2020</div>
+                            <iframe src="project2_swipe1.html"></iframe>
+                        </div>
+                    </li>
+                    <li class="section-content">
+                        <div class="text">
+                           <br> <h3>4. Deep Learning (SAR Images):</h3>
+                            <p>Used the ESRI "Oil Spill Detection" model, specifically designed for SAR images. The model is based on convolutional neural networks (CNNs) and trained with 381 Sentinel-1 images. Applied despeckle filtering, log10 transformation, and composite band creation. Detected oil spills by analyzing pixel probabilities, generating probability maps of oil presence.</p>
+                        </div>
+                        <div class="image-compare">
+                            <div class="legend">Results of the pre-trained model for the two images from 08/10/2020 (Sentinel-1 Detect Objects Using Deep Learning)</div>
+                            <iframe src="project2_swipe2.html"></iframe>
+                        </div>
+                    </li>
+                    <li class="section-content">
+                        <div class="text">
+                            <h3>5. Supervised Classification (Optical Images):</h3>
+                            <p>Performed supervised classification on Sentinel-2 images, categorizing pixels into land, water, oil, and sediments. Utilized the Oil Spill Index (OSI) and specific band compositions:</p>
+                            <p>OSI = <span class="fraction"><span class="numerator">B03 + B04</span><span class="denominator">B02</span></span></p>
+                            <p>For the Red band (R): <span class="fraction"><span class="numerator">B05 + B06</span><span class="denominator">B07</span></span></p>
+                            <p>For the Green band (G): <span class="fraction"><span class="numerator">B03 + B04</span><span class="denominator">B02</span></span></p>
+                            <p>For the Blue band (B): <span class="fraction"><span class="numerator">B11 + B12</span><span class="denominator">B08</span></span></p>
+                            <br><p>The post-processing of Sentinel-2 images involves refining classification results to enhance usability. Initially, the salt-and-pepper noise is reduced using the Majority Filter tool for a smoother image. <br><br> The raster image is then converted to a vector format with the Raster to Polygon tool, allowing easier manipulation. <br><br> Finally, elements smaller than 250 square meters are removed to focus on significant features, ensuring a clear and accurate final map.
+                        </div>
+                        <div class="image-compare">
+                            <div class="legend">Band transformation: OSI (left) and RGB (right) for 08/11/2020 (Sentinel-2 Image Assisted Classification)</div>
+                            <iframe src="project2_swipe3.html"></iframe>
+                            <div class="legend">Result of post processing, after analyzing the image on 08/11/2020 (Sentinel-2 Image Assisted Classification) </div>
+                            <iframe src="project2_swipe4.html"></iframe>
+                        </div>
+                    </li>
+                    <li class="section-content">
+                        <div class="text">
+                            <h3>6. Accuracy Assessment:</h3>
+                            <p>Validated model accuracy by comparing results with confirmed incident reports from UNOSAT. Created confusion matrices to evaluate user’s accuracy (UA), producer’s accuracy (PA), and overall accuracy (OA) for both SAR and optical models. Assessed the model's ability to correctly identify oil spills and differentiate from other substances.</p>
+                            <br><h3>7. Data Integration and Visualization:</h3>
+                            <p>Integrated results into a geographic information system (GIS) for comprehensive visualization. Produced thematic maps to communicate the extent and impact of the oil spill.</p>
+                        </div>
+                        <div class="image-compare">
+                            <div class="legend">Original image and identification of the spill detected on 08/11/2020</div>
+                            <iframe src="project2_swipe5.html"></iframe>
+                        </div>
+                    </li>
+                        <li>
+                            <br><h3>8. Key Results and Contributions:</h3>
+                            <table class="table-content" border="1" cellspacing="0" cellpadding="5">
+                                <thead>
+                                    <tr>
+                                        <th>Analysis Type</th>
+                                        <th>Positive Points</th>
+                                        <th>Negative Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>SAR Image Analysis with Deep Learning (Sentinel-1)</td></strong>
+                                        <td>SAR images were able to penetrate clouds and provide clear detection of oil slicks under various weather conditions.</td>
+                                        <td>The accuracy of SAR images varied, with several false positives in shallow water areas due to sediment confusion. The model sometimes struggled to differentiate between oil and other substances, indicating a need for improvement.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Optical Image Analysis with Supervised Classification (Sentinel-2)</strong></td>
+                                        <td>Showed clear progression of the oil spill, accurately identifying the spill's extent over time. The method achieved high precision in detecting water bodies and provided detailed visual interpretation.</td>
+                                        <td>Oil spill detection using Sentinel-2 images had variable performance with instances of false positives. Cloud cover in some images affected the classification accuracy, making it challenging to maintain consistent results.</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"><strong>Comparison:</strong> SAR images were more reliable under cloudy conditions, while optical images provided more detailed information under clear skies. Combining both methods offers a comprehensive approach to monitoring oil spills. Both SAR and optical images are essential for effective oil spill detection and monitoring. Combining data from these different sensors enhances overall detection accuracy, providing robust environmental monitoring capabilities.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- Download Button -->
+            <div class="col-6 col-12-small">
+                <ul class="actions stacked">
+                    <a href="pdf/DR.pdf" download="DR.pdf" class="button primary small fit">Download PDF</a>
+                </ul>
+            </div>
+            <div class="col-6 col-12-small">
+                <ul class="actions stacked">
+                    <a href="images/Flyer.jpg" download="DR_Flyer.jpg" class="button small fit">Download Poster</a>
+                </ul>
+            </div>
+
+            <!-- Keywords -->
+            <section>
+                <p><strong>Keywords:</strong> GIS, Remote Sensing, Oil Spill</p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <section class="alt">
+            <h3>Location</h3>
+            <p>Lisbon, Portugal <img src="../images/pt.svg" alt="Portugal Flag" style="width: 20px; height: auto; vertical-align: middle;margin-left: 10px;"></p>
+        </section>
+        <section>
+            <h3>Email</h3>
+            <p><a href="mailto:abpmendes@gmail.com">abpmendes@gmail.com</a><br/><a href="mailto:20230919@novaims.unl.pt">20230919@novaims.unl.pt</a></p>
+        </section>
+        <section>
+            <h3>Social</h3>
+            <ul class="icons alt">
+                <a href="https://github.com/beatrizmendes" class="icon brands fa-github"><span class="label">GitHub</span></a>
+                <a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a>
+            </ul>
+        </section>
+    </footer>
+
+    <!-- Copyright -->
+    <div id="copyright">
+        <ul>
+            <li>&copy; 2024 Beatriz Mendes</li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/jquery.scrollex.min.js"></script>
+<script src="../assets/js/jquery.scrolly.min.js"></script>
+<script src="../assets/js/browser.min.js"></script>
+<script src="../assets/js/breakpoints.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script>
+
+<!-- Script para ajustar a altura do iframe -->
+<script>
+    window.addEventListener('load', function() {
+        const iframes = document.querySelectorAll('.image-compare iframe');
+        iframes.forEach(iframe => {
+            iframe.onload = function() {
+                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                const imgBefore = iframeDocument.getElementById('imgBefore');
+                const imgAfter = iframeDocument.getElementById('imgAfter');
+                if (imgBefore && imgAfter) {
+                    const adjustHeight = () => {
+                        const width = iframe.clientWidth;
+                        const height = (imgBefore.naturalHeight / imgBefore.naturalWidth) * width;
+                        iframe.style.height = height + 'px';
+                    };
+                    imgBefore.onload = adjustHeight;
+                    imgAfter.onload = adjustHeight;
+                    adjustHeight(); // Adjust height initially in case images are already loaded
+                }
+            };
+        });
+    });
+</script>
+
+</body>
+</html>
