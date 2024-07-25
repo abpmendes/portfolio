@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Database for Camera Trapping - P1</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+    <style>
+
+        .image.right {
+            float: right;
+            margin-left: 20px;
+        }
+        .image.main {
+            margin: 20px 0;
+        }
+        .small-image img {
+            width: 70%; /* Ajuste o valor conforme necessário */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10px;
+        }
+        .legend {
+            font-size: 12px; /* Tamanho menor */
+            font-style: italic; /* Itálico */
+            color: #666;
+            margin-top: 5px; /* Margem pequena acima da legenda */
+            line-height: 1.2; /* Ajuste do espaçamento entre linhas */
+            text-align: center;
+        }
+        .legend.right {
+            text-align: right;
+        }
+        #map {
+            height: 80vh;
+            margin-top: 20px;
+        }
+        .legend-map {
+            background: white;
+            line-height: 1.5;
+            padding: 6px 8px;
+            font: 14px Arial, Helvetica, sans-serif;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            max-height: 50vh; /* Add this for scroll */
+            overflow-y: auto; /* Add this for scroll */
+        }
+        .legend-item {
+            margin-bottom: 8px;
+        }
+        .legend-map i {
+            display: inline-block;
+            margin-right: 8px;
+            opacity: 0.7;
+            border-radius: 50%;
+        }
+        .coordinates {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            font-size: 12px;
+            line-height: 18px;
+            border-radius: 5px;
+        }
+        .leaflet-top.leaflet-right {
+            top: 50px !important; /* Ajuste para mover o controle layers abaixo do controle de zoom */
+        }
+        .leaflet-control-layers-selector:not(:checked) + span {
+            font-weight: normal;
+            color: #6e6969; /* Cor mais clara para camadas não selecionadas */
+        }
+    </style>
+</head>
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <a href="../index.html" class="logo">Beatriz Mendes</a>
+        </header>
+
+        <!-- Nav -->
+        <nav id="nav">
+            <ul class="links">
+                <li><a href="../index.html">Portfolio</a></li>
+                <li><a href="../aboutme.html">About Me</a></li>
+            </ul>
+            <ul class="icons">
+                <li><a href="beatrizmendes.github.io" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="main-content">
+
+            <!-- Post -->
+            <section class="post">
+                <header class="major">
+                    <h2>Development of a Spatial Database for Camera Trapping</h2>
+                </header>
+
+                <p>Camera trapping, utilized by Palombar in Northeast Portugal, forms the foundation of a study focused on improving local biodiversity management and analysis by identifying areas of high biological richness, geographic distribution of various species, and their habitat preferences. By incorporating tools such as QGIS, PostgreSQL, and PostGIS, a spatial database was created to manage data from Palombar's camera trapping campaigns, specifically from projects ENET WILD and UP4Rehab. This method, which uses field-installed cameras to capture photos or videos of wildlife, helps detect species presence, monitor health status, and study behavior, offering detailed and valuable insights for wildlife conservation and optimizing data utilization in environmental projects.</p>
+                
+                <div id="map"></div> <!-- Div do mapa adicionada -->
+
+                <h3>Objectives:</h3>
+                <ol>
+                    <li>Identify areas with higher species richness using geospatial analysis.</li>
+                    <li>Understand species' geographic distribution by developing presence/absence maps.</li>
+                    <li>Conduct habitat preference analysis by overlaying species observation data with land use maps.</li>
+                </ol>
+                <h3>Study Area</h3>
+                <p>The intervention area is in Northeast Portugal, focusing on the Santulhão Game Zone in Vimioso municipality and integrating the Iberian Meseta Transboundary Biosphere Reserve and Natura 2000 Rios Sabor and Maçãs Special Protection Zone.</p>
+                
+                <div class="legend">Workflow of creating a spatial relational database</div>
+                <div class="image main"><img src="image2.jpg" alt="Image 2"></div>
+                
+                <p>A spatial database was created using PostgreSQL with the PostGIS extension and QGIS for spatial analysis. The process involved data analysis, conceptual modeling, logical design using Entity-Attribute-Relationship (EAR) modeling, and normalization. Data were imported from Excel spreadsheets and shapefiles, and spatial queries were conducted to meet study objectives.</p>
+                <h3>Conceptual Model</h3>
+                <div class="legend right">Conceptual model of the CT database</div>
+                <div class="image right"><img src="image3.jpg" alt="Image 3"></div>
+                <p>The conceptual model is the first model to be designed, aiming to capture the "business rules" and describing in an abstract and high-level manner how the data interrelates. The CT database starts with teams that develop conservation and research projects. Each project and team conduct CT campaigns, which involve installing CT cameras at various locations for variable periods. These locations overlay different land use types. Each campaign produces media, which in turn contain observations.</p>
+                
+                <h3>Logical Design – Entity-Attribute-Relationship Modeling</h3>
+                <div class="legend right">Logical Design for building the CT database, carried out using EAR modeling</div>
+                <div class="image right"><img src="image4.jpg" alt="Image 4"></div>
+                
+                <p>Transforming the conceptual model to a logical model involves Entity-Attribute-Relationship (EAR) modeling:</p>
+                <ol>
+                    <li>Identify Entities: Entities were defined in the conceptual model.</li>
+                    <li>Identification of the relationship between entities - it was found that the entities maintain a 1:M relationship with each other, with the exception of the relationship between LOCATIONS and CAMPAIGNS, which is M:N.</li>
+                    <li>Identify Attributes: Each entity's attributes were established, along with primary (PK) and foreign keys.</li>
+                    <li>Derive tables - does not always have to ser cumprido, as it is only necessary when there are M:N relationships, which cannot be modeled through the EAR process. In the case of the present work, it is necessary to derive a table, since each CT campaign takes place in many locations, but the same location can be occupied by several campaigns over time. To solve this problem, an intermediate table was introduced that allows 1:M relationships between the two entities. In this sense, a new table called LOCATION OF CAMPAIGNS was added.</li>
+                </ol>
+                <h3>Results</h3>
+                <p><strong>Species Richness:</strong> Identified locations with the highest biodiversity through queries on total observations, observations per location, and distinct species per location.</p>
+                
+                <div class="legend">Spatial representation of queries made to the database. A: number of observations of wild animals in each location; B - number of different wild species captured in each location</div>
+                <div class="small-image"><img src="image5.jpg" alt="Image 5"></div>
+                
+                <p><br><strong>Geographic Distribution:</strong> Mapped the distribution of selected species (roe deer, badger, and fox) showing varying presence across the study area.</p>
+                
+                <div class="legend">Map of presence/absence of roe deer (Capreolus capreolus), badger (Meles meles) and Map of presence/absence of foxes (Vulpes vulpes) in the ENET WILD project area</div>
+                <div class="small-image"><img src="image6.jpg" alt="Image 6"></div>
+                
+                <p><br><strong>Habitat Preferences:</strong> Analyzed land use preferences for selected species, showing a higher frequency of observations in shrublands and oak forests.</p>
+                
+                <div class="legend">Before (left) and after (right) pre-processing of the image from 08/10/2020</div>
+                <div class="image main"><img src="image7.jpg" alt="Image 7"></div>
+
+                <p>The study achieved its objectives by creating a spatial database that facilitated the identification of areas with high species richness, understanding species distribution, and analyzing habitat preferences. Future data could support more complex analyses like species occupancy models. Limitations included spatial resolution and outdated data, but the integration of QGIS, PostgreSQL, and PostGIS proved effective for managing large data volumes and conducting complex spatial analyses.</p>
+                
+            </section>
+
+            <!-- Download Button -->
+            <div class="col-6 col-12-small">
+                <ul class="actions stacked">
+                    <li><a href="../pdf/BDE.pdf" download="BDE.pdf" class="button primary small fit">Download PDF</a></li>
+                </ul>
+            </div>
+
+            <!-- Keywords -->  
+            <section>
+                <p><strong>Keywords:</strong> GIS, Database, Camera Trapping</p>
+            </section>
+        </div>
+    </div>
+        <!-- Footer -->
+        <footer id="footer">
+            <section class="alt">
+                <h3>Location</h3>
+                <p>Lisbon, Portugal <img src="../images/pt.svg" alt="Portugal Flag" style="width: 20px; height: auto; vertical-align: middle;margin-left: 10px;"></p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="mailto:abpmendes@gmail.com">abpmendes@gmail.com<br/><a href="mailto:20230919@novaims.unl.pt">20230919@novaims.unl.pt</a></p>
+            </section>
+            <section>
+                <h3>Social</h3>
+                <ul class="icons alt">
+                    <li><a href="https://github.com/beatrizmendes" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                    <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                </ul>
+            </section>
+        </footer>
+
+        <!-- Copyright -->
+        <div id="copyright">
+            <ul>
+                <li>&copy; 2024 Beatriz Mendes</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/tokml/tokml.js"></script>
+    <script src="https://unpkg.com/leaflet-geometryutil"></script>
+
+    <script>
+        // Inicialização do mapa
+        var map = L.map('map').setView([41.5101, -6.6241], 11); // Centrando em Portugal
+
+        // Adicionando camada base de ortofomapas
+        var baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Adicionando camadas de ortofotomapas
+        var orthoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }).addTo(map);
+
+        // Função para adicionar uma camada GeoJSON ao mapa
+        function addGeoJSONLayer(url, totalProperty, color, maxTotal, isPolygon = false) {
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar ' + url);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.features) {
+                        throw new Error('Dados GeoJSON inválidos');
+                    }
+                    return L.geoJSON(data, {
+                        style: isPolygon ? { color: color, weight: 2, opacity: 0.6 } : null,
+                        pointToLayer: function (feature, latlng) {
+                            if (isPolygon) return;
+                            var size = feature.properties[totalProperty] || 1;
+                            var radius = Math.sqrt(size / maxTotal) * 10; // Ajustar conforme necessário
+                            return L.circleMarker(latlng, {
+                                radius: radius,
+                                fillColor: color,
+                                color: '#000',
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 0.8
+                            });
+                        },
+                        onEachFeature: function (feature, layer) {
+                            if (isPolygon) {
+                                layer.bindPopup('ID: ' + feature.id);
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Adicionando camadas de espécies
+        var vulpesLayer, capreolusLayer, susScrofaLayer, melesMelesLayer, genettaGenettaLayer;
+        var eonetLayer, upRehabLayer;
+
+        Promise.all([
+            addGeoJSONLayer('geojson/vulpes.geojson', 'total_vulp', '#ff7800', 88).then(layer => { vulpesLayer = layer; map.addLayer(layer); }),
+            addGeoJSONLayer('geojson/capreolus.geojson', 'total_corc', '#00ff00', 106).then(layer => { capreolusLayer = layer; }),
+            addGeoJSONLayer('geojson/sus_scrofa.geojson', 'total_sus_', '#0000ff', 56).then(layer => { susScrofaLayer = layer; }),
+            addGeoJSONLayer('geojson/meles_meles.geojson', 'total_mele', '#ff00ff', 13).then(layer => { melesMelesLayer = layer; }),
+            addGeoJSONLayer('geojson/genetta_genetta.geojson', 'total_gene', '#ffff00', 17).then(layer => { genettaGenettaLayer = layer; }),
+            addGeoJSONLayer('geojson/EONET.geojson', '', '#0000ff', 0, true).then(layer => { eonetLayer = layer; map.addLayer(layer); }),
+            addGeoJSONLayer('geojson/UPRehab.geojson', '', '#00ff00', 0, true).then(layer => { upRehabLayer = layer; map.addLayer(layer); })
+        ]).then(layers => {
+            var overlays = {
+                "Fox <i>(Vulpes)</i>": vulpesLayer,
+                "Doe <i>(Capreolus)</i>": capreolusLayer,
+                "Boar <i>(Sus Scrofa)</i>": susScrofaLayer,
+                "Badger <i>(Meles Meles)</i>": melesMelesLayer,
+                "Gineta <i>(Genetta genetta)</i>": genettaGenettaLayer
+            };
+            L.control.layers(null, overlays, { position: 'topleft' }).addTo(map);
+            updateLegend();
+            map.on('overlayadd overlayremove', function () {
+                updateLegend();
+            });
+        }).catch(error => {
+            console.error("Erro ao carregar camadas de espécies:", error);
+        });
+
+        // Função para obter as classes de tamanho
+        function getSizeClasses(maxTotal) {
+            var classes = [];
+            for (var i = 1; i <= maxTotal; i += Math.ceil(maxTotal / 5)) {
+                classes.push(i);
+            }
+            return classes;
+        }
+
+        // Atualiza a legenda
+        function updateLegend() {
+            var legend = document.querySelector('.legend-map');
+            if (!legend) {
+                legend = L.control({ position: 'bottomright' });
+                legend.onAdd = function (map) {
+                    var div = L.DomUtil.create('div', 'legend-map');
+                    div.innerHTML = '<h4>Legend</h4>';
+                    return div;
+                };
+                legend.addTo(map);
+            }
+
+            var html = '<h4>Legend</h4>';
+            if (vulpesLayer && map.hasLayer(vulpesLayer)) {
+                html += '<div class="legend-item">Fox <i>(Vulpes)</i></div>';
+                getSizeClasses(88).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #ff7800; width: ' + (Math.sqrt(size / 88) * 10) * 2 + 'px; height: ' + (Math.sqrt(size / 88) * 10) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (capreolusLayer && map.hasLayer(capreolusLayer)) {
+                html += '<div class="legend-item">Doe (Capreolus)</div>';
+                getSizeClasses(106).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #00ff00; width: ' + (Math.sqrt(size / 106) * 10) * 2 + 'px; height: ' + (Math.sqrt(size / 106) * 10) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (susScrofaLayer && map.hasLayer(susScrofaLayer)) {
+                html += '<div class="legend-item">Boar <i>(Sus Scrofa)</i></div>';
+                getSizeClasses(56).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #0000ff; width: ' + (Math.sqrt(size / 56) * 10) * 2 + 'px; height: ' + (Math.sqrt(size / 56) * 10) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (melesMelesLayer && map.hasLayer(melesMelesLayer)) {
+                html += '<div class="legend-item">Badger <i>(Meles Meles)</i></div>';
+                getSizeClasses(13).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #ff00ff; width: ' + (Math.sqrt(size / 13) * 10) * 2 + 'px; height: ' + (Math.sqrt(size / 13) * 10) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (genettaGenettaLayer && map.hasLayer(genettaGenettaLayer)) {
+                html += '<div class="legend-item">Gineta <i>(Genetta genetta)</i></div>';
+                getSizeClasses(17).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #ffff00; width: ' + (Math.sqrt(size / 17) * 10) * 2 + 'px; height: ' + (Math.sqrt(size / 17) * 10) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+
+            html += '<div class="legend-item">EONET</div><div class="legend-item"><i style="background: #0000ff; width: 20px; height: 20px; border-radius: 0;"></i></div>';
+            html += '<div class="legend-item">UPRehab</div><div class="legend-item"><i style="background: #00ff00; width: 20px; height: 20px; border-radius: 0;"></i></div>';
+
+            document.querySelector('.legend-map').innerHTML = html;
+        }
+    </script>
+
+</body>
+</html>

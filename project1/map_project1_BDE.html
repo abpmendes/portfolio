@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>New Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <style>
+        #map {
+            height: 70vh;
+            margin-top: 20px;
+        }
+        .legend {
+            background: white;
+            line-height: 1.5;
+            padding: 6px 8px;
+            font: 14px Arial, Helvetica, sans-serif;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            max-height: 50vh; /* Add this for scroll */
+            overflow-y: auto; /* Add this for scroll */
+        }
+        .legend-item {
+            margin-bottom: 8px;
+        }
+        .legend i {
+            display: inline-block;
+            margin-right: 8px;
+            opacity: 0.7;
+            border-radius: 50%;
+        }
+        .coordinates {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            font-size: 12px;
+            line-height: 18px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="coordinates" class="coordinates"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script>
+        // Inicialização do mapa
+        var map = L.map('map').setView([41.5101, -6.6241], 11); // Centrando em Portugal
+
+        // Adicionando camada base de ortofomapas
+        var baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Adicionando camadas de ortofotomapas
+        var orthoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }).addTo(map);
+
+        // Função para adicionar uma camada GeoJSON ao mapa
+        function addGeoJSONLayer(url, totalProperty, color, maxTotal, isPolygon = false) {
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar ' + url);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.features) {
+                        throw new Error('Dados GeoJSON inválidos');
+                    }
+                    return L.geoJSON(data, {
+                        style: isPolygon ? { color: color, weight: 2, opacity: 0.6 } : null,
+                        pointToLayer: function (feature, latlng) {
+                            if (isPolygon) return;
+                            var size = feature.properties[totalProperty] || 1;
+                            var radius = Math.sqrt(size / maxTotal) * 20; // Ajustar conforme necessário
+                            return L.circleMarker(latlng, {
+                                radius: radius,
+                                fillColor: color,
+                                color: '#000',
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 0.8
+                            });
+                        },
+                        onEachFeature: function (feature, layer) {
+                            if (isPolygon) {
+                                layer.bindPopup('ID: ' + feature.id);
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Adicionando camadas de espécies
+        var vulpesLayer, capreolusLayer, susScrofaLayer, melesMelesLayer, genettaGenettaLayer;
+        var eonetLayer, upRehabLayer;
+
+        Promise.all([
+            addGeoJSONLayer('geojson/vulpes.geojson', 'total_vulp', '#ff7800', 88).then(layer => { vulpesLayer = layer; map.addLayer(layer); }),
+            addGeoJSONLayer('geojson/capreolus.geojson', 'total_corc', '#00ff00', 106).then(layer => { capreolusLayer = layer; }),
+            addGeoJSONLayer('geojson/sus_scrofa.geojson', 'total_sus_', '#0000ff', 56).then(layer => { susScrofaLayer = layer; }),
+            addGeoJSONLayer('geojson/meles_meles.geojson', 'total_mele', '#ff00ff', 13).then(layer => { melesMelesLayer = layer; }),
+            addGeoJSONLayer('geojson/genetta_genetta.geojson', 'total_gene', '#ffff00', 17).then(layer => { genettaGenettaLayer = layer; }),
+            addGeoJSONLayer('geojson/EONET.geojson', '', '#0000ff', 0, true).then(layer => { eonetLayer = layer; map.addLayer(layer); }),
+            addGeoJSONLayer('geojson/UPRehab.geojson', '', '#00ff00', 0, true).then(layer => { upRehabLayer = layer; map.addLayer(layer); })
+        ]).then(layers => {
+            var overlays = {
+                "Fox <i>(Vulpes)</i>": vulpesLayer,
+                "Doe <i>(Capreolus)</i>": capreolusLayer,
+                "Boar <i>(Sus Scrofa)</i>": susScrofaLayer,
+                "Badger <i>(Meles Meles)</i>": melesMelesLayer,
+                "Gineta <i>(Genetta genetta)</i>": genettaGenettaLayer
+            };
+            L.control.layers(null, overlays).addTo(map);
+            updateLegend();
+            map.on('overlayadd overlayremove', function () {
+                updateLegend();
+            });
+        }).catch(error => {
+            console.error("Erro ao carregar camadas de espécies:", error);
+        });
+
+        // Função para obter as classes de tamanho
+        function getSizeClasses(maxTotal) {
+            var classes = [];
+            for (var i = 1; i <= maxTotal; i += Math.ceil(maxTotal / 5)) {
+                classes.push(i);
+            }
+            return classes;
+        }
+
+        // Atualiza a legenda
+        function updateLegend() {
+            var legend = document.querySelector('.legend');
+            if (!legend) {
+                legend = L.control({ position: 'bottomright' });
+                legend.onAdd = function (map) {
+                    var div = L.DomUtil.create('div', 'legend');
+                    div.innerHTML = '<h4>Legend</h4>';
+                    return div;
+                };
+                legend.addTo(map);
+            }
+
+            var html = '<h4>Legend</h4>';
+            if (vulpesLayer && map.hasLayer(vulpesLayer)) {
+                html += '<div class="legend-item">Fox <i>(Vulpes)</i></div>';
+                getSizeClasses(88).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #ff7800; width: ' + (Math.sqrt(size / 88) * 20) * 2 + 'px; height: ' + (Math.sqrt(size / 88) * 20) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (capreolusLayer && map.hasLayer(capreolusLayer)) {
+                html += '<div class="legend-item">Doe (Capreolus)</div>';
+                getSizeClasses(106).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #00ff00; width: ' + (Math.sqrt(size / 106) * 20) * 2 + 'px; height: ' + (Math.sqrt(size / 106) * 20) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (susScrofaLayer && map.hasLayer(susScrofaLayer)) {
+                html += '<div class="legend-item">Boar <i>(Sus Scrofa)</i></div>';
+                getSizeClasses(56).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #0000ff; width: ' + (Math.sqrt(size / 56) * 20) * 2 + 'px; height: ' + (Math.sqrt(size / 56) * 20) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (melesMelesLayer && map.hasLayer(melesMelesLayer)) {
+                html += '<div class="legend-item">Badger <i>(Meles Meles)</i></div>';
+                getSizeClasses(13).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #ff00ff; width: ' + (Math.sqrt(size / 13) * 20) * 2 + 'px; height: ' + (Math.sqrt(size / 13) * 20) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+            if (genettaGenettaLayer && map.hasLayer(genettaGenettaLayer)) {
+                html += '<div class="legend-item">Gineta <i>(Genetta genetta)</i></div>';
+                getSizeClasses(17).forEach(function (size) {
+                    html += '<div class="legend-item"><i style="background: #ffff00; width: ' + (Math.sqrt(size / 17) * 20) * 2 + 'px; height: ' + (Math.sqrt(size / 17) * 20) * 2 + 'px;"></i> ' + size + '</div>';
+                });
+            }
+
+            html += '<div class="legend-item">EONET</div><div class="legend-item"><i style="background: #0000ff; width: 20px; height: 20px; border-radius: 0;"></i></div>';
+            html += '<div class="legend-item">UPRehab</div><div class="legend-item"><i style="background: #00ff00; width: 20px; height: 20px; border-radius: 0;"></i></div>';
+
+            document.querySelector('.legend').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
