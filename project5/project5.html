@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Interpolated Surface - Project 5</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+    <style>
+        .figure img {
+            max-width: 70%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .figure {
+            text-align: center;
+        }
+        .figure figcaption {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <a href="../index.html" class="logo">Beatriz Mendes</a>
+        </header>
+
+        <!-- Nav -->
+        <nav id="nav">
+            <ul class="links">
+                <li><a href="../index.html">Portfolio</a></li>
+                <li><a href="../aboutme.html">About Me</a></li>
+            </ul>
+            <ul class="icons">
+                <li><a href="https://github.com/beatrizmendes" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="main-content">
+
+            <!-- Post -->
+            <section class="post">
+                <header class="major">
+                    <h2>Interpolated Surface of Daily Average Wind Speed in the Central Region of Portugal</h2>
+                </header>
+
+                <h3>Introduction</h3>
+                <p>This work, developed within the scope of the Spatial Statistics course, aims to produce an interpolated surface of the daily average wind speed in the central region of Portugal, using a DTM as an explanatory variable. The objective is to address the following questions through the results produced:</p>
+                <ul>
+                    <li>What is the geographical location of the extreme values of wind speed?</li>
+                    <li>Are there areas that stand out for their high or low wind speeds?</li>
+                    <li>Is there a global identifiable trend in wind speed values?</li>
+                    <li>Was global spatial autocorrelation identified in wind speed data? Does this mean that wind speed in a certain area is influenced by values in neighboring areas?</li>
+                    <li>Analyze the spatial correlation between wind speed (dependent variable) and the DTM (independent variable).</li>
+                </ul>
+                <figure class="figure">
+                    <figcaption>Figure 1: Study Area</figcaption>
+                    <img src="Figure1.jpg" alt="Study Area" />
+                </figure>
+                <h3>Methodology</h3>
+                <figure class="figure">
+                    <figcaption>Figure 2: Methodology Flowchart</figcaption>
+                    <img src="Figure2.jpg" alt="Methodology Flowchart" />
+                </figure>
+
+                <ol>
+                    <li><strong>Data Collection and Cleaning:</strong>
+                        <p>Data on daily average wind speed were collected from 180 meteorological stations in the Central region of Continental Portugal for the period 2001-2023 through the National Information System on Water Resources (SNIRH-APA). Additionally, data on the characteristics of each station were also collected. These data were obtained in two .csv files, which were then imported into ArcGIS Pro for spatial joining and cleaning.</p>
+                    </li>
+
+                    <li><strong>Exploratory Spatial Data Analysis (ESDA):</strong>
+                        <p>An exploratory analysis of the spatial data was conducted to gain preliminary insights. This included developing:</p>
+                        <ul>
+                            <li>A histogram to visualize wind speed distribution and identify patterns or anomalies.</li>
+                            <li>Analysis of the geographic distribution of meteorological stations to provide insights into spatial coverage and potential sampling areas.</li>
+                            <li>Identification of outliers using visualization of the geographic distribution and the quartile method.</li>
+                            <li>A Voronoi map to visualize areas influenced by each meteorological station.</li>
+                            <li>Spatial Autocorrelation analysis using Global Moran's I to determine significant spatial patterns.</li>
+                        </ul>
+                        <figure class="figure">
+                            <figcaption>Figure 3: Histogram of average daily wind speed</figcaption>
+                            <img src="Figure3.jpg" alt="Histogram of average daily wind speed" />
+                        </figure>
+                        <figure class="figure">
+                            <figcaption>Figure 4: Identification of outliers</figcaption>
+                            <img src="Figure4.jpg" alt="Identification of outliers" />
+                        </figure>
+                        <figure class="figure">
+                            <figcaption>Figure 5: Voronoi map of average daily wind speed</figcaption>
+                            <img src="Figure5.jpg" alt="Voronoi map of average daily wind speed" />
+                        </figure>
+                    </li>
+
+                    <li><strong>Exploratory Interpolation:</strong>
+                        <p>Various interpolation methods were evaluated using the Exploratory Interpolation tool in ArcGIS Pro to determine the most suitable method. The Empirical Bayesian Kriging (EBK) Regression was chosen for its ability to handle complex spatial data and integrate additional explanatory variables, such as the DTM.</p>
+                        <figure class="figure">
+                            <figcaption>Figure 6: Exploratory Interpolation in ArcGIS Pro</figcaption>
+                            <img src="Figure6.jpg" alt="Exploratory Interpolation in ArcGIS Pro" />
+                        </figure>
+                    </li>
+
+                    <li><strong>EBK Regression:</strong>
+                        <p>EBK Regression was selected due to its adaptive statistical approach and ability to create multiple semivariograms. This method was chosen for its accuracy and flexibility, especially when dealing with data that exhibit non-uniform or complex spatial variability. The K-Bessel Semivariogram Type was chosen for its flexibility and higher accuracy. Various tests were conducted to fine-tune the model, adjusting the number of neighbors and sectors to optimize prediction accuracy.</p>
+                    </li>
+                </ol>
+
+                <h3>Results</h3>
+                <p>The results of the EBK Regression model show the interpolated surface of daily average wind speed in the Central region of Portugal. The model effectively captures the spatial variability and provides a reliable estimation of wind speeds, which is valuable for wind energy project planning.</p>
+                <figure class="figure">
+                    <figcaption>Figure 7: Interpolated surface of daily average wind speed</figcaption>
+                    <img src="Figure7.jpg" alt="Interpolated surface of daily average wind speed" />
+                </figure>
+                <figure class="figure">
+                    <figcaption>Figure 8: Standard Error EBK Regression Result</figcaption>
+                    <img src="Figure8.jpg" alt="Standard Error EBK Regression Result" />
+                </figure>
+                
+                <h3>Conclusion</h3>
+                <p>The detailed analysis of wind speed data in the central region of Portugal using EBK Regression methodology revealed the complexity and variability of wind conditions. No trend was identified in data distribution or outliers. The spatial autocorrelation of the data is insignificant, and the values of nugget, range, and sill reflect the high complexity of wind patterns in the central region of Portugal.</p>
+                <div id="map"></div> <!-- Div do mapa adicionada -->
+            </section>
+            
+            <!-- Download Button -->
+            <div class="col-6 col-12-small">
+                <ul class="actions stacked">
+                    <li><a href="../pdf/StatialSta.pdf" download="StatialSta.pdf" class="button primary small fit">Download PDF</a></li>
+                </ul>
+            </div>
+
+            <!-- Keywords -->  
+            <section>
+                <p><strong>Keywords:</strong> GIS, Spatial Statistics, EBK</p>
+            </section>
+        </div>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <section class="alt">
+                <h3>Location</h3>
+                <p>Lisbon, Portugal <img src="../images/pt.svg" alt="Portugal Flag" style="width: 20px; height: auto; vertical-align: middle;margin-left: 10px;"></p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="mailto:abpmendes@gmail.com">abpmendes@gmail.com</a><br/><a href="mailto:20230919@novaims.unl.pt">20230919@novaims.unl.pt</a></p>
+            </section>
+            <section>
+                <h3>Social</h3>
+                <ul class="icons alt">
+                    <a href="https://github.com/beatrizmendes" class="icon brands fa-github"><span class="label">GitHub</span></a>
+                    <a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a>
+                </ul>
+            </section>
+        </footer>
+
+        <!-- Copyright -->
+        <div id="copyright">
+            <ul>
+                <li>&copy; 2024 Beatriz Mendes</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/tokml/tokml.js"></script>
+    <script src="https://unpkg.com/leaflet-geometryutil"></script>
+
+</body>
+</html>
