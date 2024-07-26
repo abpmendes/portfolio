@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Satellite Image Classification - Project 7</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <a href="../index.html" class="logo">Beatriz Mendes</a>
+        </header>
+
+        <!-- Nav -->
+        <nav id="nav">
+            <ul class="links">
+                <li><a href="../index.html">Portfolio</a></li>
+                <li><a href="../aboutme.html">About Me</a></li>
+            </ul>
+            <ul class="icons">
+                <li><a href="https://abpmendes.github.io/portfolio/" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="main-content">
+
+            <!-- Post -->
+            <section class="post">
+                <header class="major">
+                    <h2>Satellite Image Classification</h2>
+                </header>
+                <p>This project focuses on classifying satellite images into three distinct land-use classes: urban, rural, and forest. The classification is achieved through the application of various unsupervised clustering algorithms.</p>
+
+                <h3>Objective</h3>
+                <p>To explore and implement different unsupervised clustering methods to classify satellite images based on their land-use types, utilizing a dataset characterized by four key variables.</p>
+
+                <h3>Methodology</h3>
+                <h4>Data Preprocessing</h4>
+                <ul>
+                    <li><strong>Importing Data:</strong> Data was imported using the "Excel Reader" node in KNIME.</li>
+                    <li><strong>Normalization:</strong> The dataset was normalized using the "Normalizer" node.</li>
+                    <li><strong>Partitioning:</strong> The dataset was split into training and testing sets (70-30%) using the "Partitioning" node.</li>
+                </ul>
+
+                <h4>Clustering Algorithms</h4>
+                <p>Several unsupervised clustering models were tested, including:</p>
+                <ul>
+                    <li><strong>K-Means Clustering:</strong> Groups data into k clusters based on proximity to centroids.</li>
+                    <li><strong>Hierarchical Clustering:</strong> Constructs a dendrogram to represent proximity relationships.</li>
+                    <li><strong>DBSCAN:</strong> Identifies high-density regions separated by low-density regions.</li>
+                    <li><strong>Fuzzy c-Means:</strong> Allows points to belong to multiple clusters.</li>
+                    <li><strong>Self-Organizing Map (SOM):</strong> Uses a neural network for clustering and dimensionality reduction.</li>
+                </ul>
+
+                <h4>Evaluation Metrics</h4>
+                <ul>
+                    <li><strong>User's Accuracy (UA):</strong> The correctness of the model in predicting a category.</li>
+                    <li><strong>Producer's Accuracy (PA):</strong> The model's ability to identify real instances of a category.</li>
+                    <li><strong>Overall Accuracy (OA):</strong> The overall accuracy of the model across all categories.</li>
+                </ul>
+
+                <h3>Results</h3>
+                <p>Each clustering model was evaluated through confusion matrices and the calculated accuracy metrics. Two test scenarios were conducted:</p>
+                <ul>
+                    <li>Using the test dataset obtained through partitioning.</li>
+                    <li>Using the entire dataset, including the test set.</li>
+                </ul>
+                <p>The results indicated that the Self-Organizing Map (SOM) and Fuzzy c-Means algorithms were the most effective, with high accuracy and consistency across different test scenarios.</p>
+
+                <p>For a detailed comparison of the clustering models, please visit the <a href="project7_tables.html">Comparison Tables</a> page.</p>
+
+            </section>
+
+
+            <!-- Keywords -->  
+            <section>
+                <p><strong>Keywords:</strong> GIS, Remote Sensing, Data Mining</p>
+            </section>
+        </div>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <section class="alt">
+                <h3>Location</h3>
+                <p>Lisbon, Portugal <img src="../images/pt.svg" alt="Portugal Flag" style="width: 20px; height: auto; vertical-align: middle;margin-left: 10px;"></p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="mailto:abpmendes@gmail.com">abpmendes@gmail.com</a><br/><a href="mailto:20230919@novaims.unl.pt">20230919@novaims.unl.pt</a></p>
+            </section>
+            <section>
+                <h3>Social</h3>
+                <ul class="icons alt">
+                    <a href="https://abpmendes.github.io/portfolio/" class="icon brands fa-github"><span class="label">GitHub</span></a>
+                    <a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a>
+                </ul>
+            </section>
+        </footer>
+
+        <!-- Copyright -->
+        <div id="copyright">
+            <ul>
+                <li>&copy; 2024 Beatriz Mendes</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/tokml/tokml.js"></script>
+    <script src="https://unpkg.com/leaflet-geometryutil"></script>
+
+</body>
+</html>

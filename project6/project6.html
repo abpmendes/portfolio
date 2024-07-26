@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Predictive Modeling - Project 6</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+    <style>        
+        .figure img {
+            max-width: 70%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .figure {
+        text-align: center;
+        }
+</style>
+</head>
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <a href="../index.html" class="logo">Beatriz Mendes</a>
+        </header>
+
+        <!-- Nav -->
+        <nav id="nav">
+            <ul class="links">
+                <li><a href="../index.html">Portfolio</a></li>
+                <li><a href="../aboutme.html">About Me</a></li>
+            </ul>
+            <ul class="icons">
+                <li><a href="https://abpmendes.github.io/portfolio/" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="main-content">
+
+            <!-- Post -->
+            <section class="post">
+                <header class="major">
+                    <h2>Predictive Modeling for Meteorological Stations</h2>
+                </header>
+                <p><strong>1. Identification of the Station to Close</strong><br>
+                Based on the analysis using multi-layer perceptron (MLP) neural networks in KNIME Analytics Platform, station E2 can be closed with the least impact on the accuracy of weather forecasts from the remaining stations. This conclusion is derived from the lowest values of Mean Absolute Error (MAE) and Mean Squared Error (MSE), and the highest adjusted R² value for models excluding E2, indicating that the information loss from E2 can be compensated by the other stations.</p>
+
+                <p><strong>2. Expected Mean Squared Error (MSE) Post-Closure</strong><br>
+                The expected MSE for the predictions, after closing station E2, is 0.01, the lowest among the tested models. This indicates high prediction accuracy even without E2, suggesting the data from this station is redundant compared to the contributions of the other stations. This metric was obtained using the “Numeric Scorer” node in KNIME, which also calculated an MAE of 0.0848 and an adjusted R² of 0.8143 for predictions excluding station 2. In comparison, models predicting temperatures without one of the other stations had higher MSEs ranging from 0.015 to 0.0264, reinforcing the decision to close E2.</p>
+
+                <p><strong>Summary of Results from Numeric Scorer for Each Station:</strong></p>
+                <table>
+                    <tr>
+                        <th>Station</th>
+                        <th>R²</th>
+                        <th>MAE</th>
+                        <th>MSE</th>
+                        <th>RMSE</th>
+                        <th>MSD</th>
+                        <th>Adjusted R²</th>
+                    </tr>
+                    <tr>
+                        <td>E1</td>
+                        <td>0.6931</td>
+                        <td>0.1378</td>
+                        <td>0.0264</td>
+                        <td>0.1625</td>
+                        <td>-0.0080</td>
+                        <td>0.6931</td>
+                    </tr>
+                    <tr>
+                        <td>E2</td>
+                        <td>0.8143</td>
+                        <td>0.0848</td>
+                        <td>0.0100</td>
+                        <td>0.1000</td>
+                        <td>-0.0264</td>
+                        <td>0.8143</td>
+                    </tr>
+                    <tr>
+                        <td>E3</td>
+                        <td>0.5619</td>
+                        <td>0.1162</td>
+                        <td>0.0195</td>
+                        <td>0.1397</td>
+                        <td>0.0700</td>
+                        <td>0.5619</td>
+                    </tr>
+                    <tr>
+                        <td>E4</td>
+                        <td>0.7539</td>
+                        <td>0.1062</td>
+                        <td>0.0150</td>
+                        <td>0.1226</td>
+                        <td>-0.0161</td>
+                        <td>0.7539</td>
+                    </tr>
+                </table>
+
+                <p><strong>3. Neural Network Architecture Description</strong><br>
+                A multi-layer perceptron (MLP) neural network architecture using the Resilient Backpropagation (RProp) algorithm was employed. This was implemented through the “RProp MLP Learner” and “MultiLayer Perceptron Predictor” nodes in KNIME. The network was configured to train for a maximum of 100 iterations, with one hidden layer containing 10 neurons. Each station (E1, E2, E3, and E4) was analyzed using separate nodes, defining the respective station's column as the class column.</p>
+
+                <p>The “RProp MLP Learner” node implements the Resilient Propagation algorithm, which adjusts the network weights independently of the gradient magnitude, relying solely on the sign. This enables fast and stable convergence without the need for fine-tuning learning parameters. The “MultiLayer Perceptron Predictor” node uses the final network weights to make predictions on new input data, without requiring further adjustments during this phase.</p>
+
+                <p><strong>4. Procedure for Choosing the Station to Close</strong><br>
+                Data from 500 temperature observations across the four stations under various climatic conditions were divided into three sets (training – 15%, testing – 15%, and validation – 15%). These sets were imported into Knime via the “Excel Reader” node and normalized using the “Normalizer” node.</p>
+
+                <p>For each station, an analysis was conducted using the “RProp MLP Learner” and “MultiLayer Perceptron Predictor” nodes, excluding one station at a time from the input data and using the remaining three as predictive variables.</p>
+
+                <p>The models were evaluated using the “Numeric Scorer” node, as the “Scorer” node does not support numerical columns. The evaluation process for the test set (see Table 1) identified the station to close and was subsequently applied to the validation set, which confirmed the decision to close E2.</p>
+
+                <p><strong>Summary of Results from Numeric Scorer for the Validation Set:</strong></p>
+                <table>
+                    <tr>
+                        <th>Station</th>
+                        <th>R²</th>
+                        <th>MAE</th>
+                        <th>MSE</th>
+                        <th>RMSE</th>
+                        <th>MSD</th>
+                        <th>Adjusted R²</th>
+                    </tr>
+                    <tr>
+                        <td>E1</td>
+                        <td>0.6166</td>
+                        <td>0.1564</td>
+                        <td>0.0359</td>
+                        <td>0.1895</td>
+                        <td>0.0191</td>
+                        <td>0.6166</td>
+                    </tr>
+                    <tr>
+                        <td>E2</td>
+                        <td>0.7950</td>
+                        <td>0.0889</td>
+                        <td>0.0114</td>
+                        <td>0.1066</td>
+                        <td>-0.0466</td>
+                        <td>0.7950</td>
+                    </tr>
+                    <tr>
+                        <td>E3</td>
+                        <td>0.5686</td>
+                        <td>0.1065</td>
+                        <td>0.0168</td>
+                        <td>0.1296</td>
+                        <td>0.0317</td>
+                        <td>0.5686</td>
+                    </tr>
+                    <tr>
+                        <td>E4</td>
+                        <td>0.6960</td>
+                        <td>0.0976</td>
+                        <td>0.0141</td>
+                        <td>0.1186</td>
+                        <td>0.0009</td>
+                        <td>0.6960</td>
+                    </tr>
+                </table>
+
+                <p>Additionally, a correlation matrix analysis of the station data showed that E2 had the highest correlation with the other stations, further validating the decision to close E2.</p>
+
+                <p><strong>Correlation Matrix Summary:</strong></p>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>E1</th>
+                        <th>E2</th>
+                        <th>E3</th>
+                        <th>E4</th>
+                        <th>Sum</th>
+                    </tr>
+                    <tr>
+                        <td>E1</td>
+                        <td>1</td>
+                        <td>0.992</td>
+                        <td>0.983</td>
+                        <td>0.991</td>
+                        <td>2.966</td>
+                    </tr>
+                    <tr>
+                        <td>E2</td>
+                        <td>0.992</td>
+                        <td>1</td>
+                        <td>0.991</td>
+                        <td>0.993</td>
+                        <td>2.976</td>
+                    </tr>
+                    <tr>
+                        <td>E3</td>
+                        <td>0.983</td>
+                        <td>0.991</td>
+                        <td>1</td>
+                        <td>0.984</td>
+                        <td>2.958</td>
+                    </tr>
+                    <tr>
+                        <td>E4</td>
+                        <td>0.991</td>
+                        <td>0.993</td>
+                        <td>0.984</td>
+                        <td>1</td>
+                        <td>2.968</td>
+                    </tr>
+                </table>
+
+                <p><strong>Conclusion</strong><br>
+                The analysis indicates that closing station E2 will have the least impact on the overall prediction accuracy. The neural network model developed and tested shows a high degree of reliability, and the procedures followed ensure that the decision is well-supported by the data.</p>
+
+                <figure class="figure">
+                    <figcaption>Figure 1: Knime's workflow</figcaption>
+                    <img src="Figure1.jpg" alt="Study Area" />
+                </figure>
+            </section>
+
+            <!-- Download Button -->
+            <!-- <div class="col-6 col-12-small">
+                <ul class="actions stacked">
+                    <li><a href="../pdf/StatialSta.pdf" download="StatialSta.pdf" class="button primary small fit">Download PDF</a></li>
+                </ul>
+            </div> -->
+
+            <!-- Keywords -->  
+            <section>
+                <p><strong>Keywords:</strong> Predictive Modeling, Neural Networks, Data Mining, Spatial Statistics</p>
+            </section>
+        </div>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <section class="alt">
+                <h3>Location</h3>
+                <p>Lisbon, Portugal <img src="../images/pt.svg" alt="Portugal Flag" style="width: 20px; height: auto; vertical-align: middle;margin-left: 10px;"></p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="mailto:abpmendes@gmail.com">abpmendes@gmail.com</a><br/><a href="mailto:20230919@novaims.unl.pt">20230919@novaims.unl.pt</a></p>
+            </section>
+            <section>
+                <h3>Social</h3>
+                <ul class="icons alt">
+                    <li><a href="https://abpmendes.github.io/portfolio/" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                    <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                </ul>
+            </section>
+        </footer>
+
+        <!-- Copyright -->
+        <div id="copyright">
+            <ul>
+                <li>&copy; 2024 Beatriz Mendes</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/tokml/tokml.js"></script>
+    <script src="https://unpkg.com/leaflet-geometryutil"></script>
+
+</body>
+</html>
