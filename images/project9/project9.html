@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Web application - Project 3</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <a href="../index.html" class="logo">Beatriz Mendes</a>
+        </header>
+
+        <!-- Nav -->
+        <nav id="nav">
+            <ul class="links">
+                <li><a href="../index.html">Portfolio</a></li>
+                <li><a href="../aboutme.html">About Me</a></li>
+            </ul>
+            <ul class="icons">
+                <li><a href="https://abpmendes.github.io/portfolio/" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                <li><a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main -->
+        <div id="main">
+            <div class="main-content">
+
+            <!-- Post -->
+            <section class="post">
+                <header class="major">
+                    <h2>Interpolated Surface of Daily Average Wind Speed in the Central Region of Portugal</h2>
+
+                </header>
+                <div class="image main"><img src="images/pic01.jpg" alt="" /></div>
+                <p>This project involves the creation of an interactive map of Portugal using the Leaflet library, combined with various plugins and custom functionalities to provide a comprehensive geospatial visualization tool. The map integrates multiple layers, including vector and raster data, and provides tools for user interaction such as drawing and measuring. Below is a detailed explanation of the key components and functionalities implemented in this project.</p>
+                <ol><li> <strong> Custom Icon for Wind Turbines: </strong> A custom icon representing wind turbines is defined and adjusted based on the zoom level to ensure appropriate visibility at different scales. <p></li>
+				<li> <strong> Map Initialization: </strong> The map is initialized and centered on Portugal with a predefined zoom level. Several base layers are added, including OpenStreetMap, OpenTopoMap, and Esri World Imagery, providing users with different perspectives and levels of detail. <p></li>
+				<li> <strong> Adding GeoJSON Layers: </strong> GeoJSON layers are fetched and added to the map. In this project, two shapefiles are displayed: one for wind turbines and another for electric lines. The wind turbines are represented by the custom icon, and the electric lines are styled with a red line. <p></li>
+				<li> <strong> Dynamic Legend: </strong> A dynamic legend is added to the map to help users understand the different layers. The legend updates automatically based on the visible layers. <p></li>
+				<li> <strong> Drawing and Measuring Tools: </strong> Tools for drawing various shapes (polylines, polygons, markers, circles, and rectangles) are added to the map, allowing users to interact with the map by creating their own geometries. The drawn shapes can display measurements such as length and area in popups. <p></li>
+				<li> <strong> Exporting Data: </strong> An export button is integrated to allow users to download the drawn shapes as KML/KMZ files, enabling further use in other GIS applications. <p></li>
+				<li> <strong> Responsive Design: </strong> The map and its components are designed to be responsive, ensuring a good user experience across different devices and screen sizes. <p></li></ol>
+                <div id="map"></div> <!-- Div do mapa adicionada -->
+            </section>
+                        <!-- Download Button -->
+            <div class="col-6 col-12-small">
+                <ul class="actions stacked">
+                    <li><a href="../pdf/StatialSta.pdf" download="StatialSta.pdf" class="button primary small fit">Download PDF</a></li>
+                </ul>
+            </div>
+
+            <!-- Keywords -->  
+            <section>
+                <p><strong>Keywords:</strong> Database, Circular Economy</p>
+            </section>
+        </div>
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <section class="alt">
+                <h3>Location</h3>
+                <p>Lisbon, Portugal <img src="../images/pt.svg" alt="Portugal Flag" style="width: 20px; height: auto; vertical-align: middle;margin-left: 10px;"></p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="mailto:abpmendes@gmail.com">abpmendes@gmail.com</a><br/><a href="mailto:20230919@novaims.unl.pt">20230919@novaims.unl.pt</a></p>
+            </section>
+            <section>
+                <h3>Social</h3>
+                <ul class="icons alt">
+                    <a href="https://abpmendes.github.io/portfolio/" class="icon brands fa-github"><span class="label">GitHub</span></a>
+                    <a href="https://www.linkedin.com/in/ana-beatriz-mendes-843424142/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a>
+                </ul>
+            </section>
+        </footer>
+
+        <!-- Copyright -->
+        <div id="copyright">
+            <ul>
+                <li>&copy; 2024 Beatriz Mendes</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/tokml/tokml.js"></script>
+    <script src="https://unpkg.com/leaflet-geometryutil"></script>
+
+</body>
+</html>
